@@ -3,7 +3,7 @@ A simple yet adequately powerful dependency injection container to help implemen
 It supports registering/binding:
 - classes
 - function constructors
-- factory function
+- factory functions
 
 Auto sub-dependency resolution is supported.
 Services can be resolved as singletons or new instances each time they are requested.
