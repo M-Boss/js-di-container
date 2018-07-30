@@ -5,7 +5,7 @@ It supports registering/binding:
 - function constructors
 - factory functions
 
-Auto sub-dependency resolution is supported.
+Auto sub-dependency resolution is supported.  
 Services can be resolved as singletons or new instances each time they are requested.
 
 ## Installation
