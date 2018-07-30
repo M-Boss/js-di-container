@@ -6,7 +6,7 @@ It supports registering/binding:
 - factory functions
 
 Auto sub-dependency resolution is supported.  
-Services can be resolved as singletons or new instances each time they are requested.
+Services can be resolved as singletons or new instances each time they are requested by passing an "options" parameter to "register*" methods.
 
 ## Installation
 ```javascript
