@@ -15,7 +15,7 @@ npm install --save js-di-container
 
 
 ## Examples
-Simple service registeration using classes and a factory function:
+Simple service registeration using classes and a factory function.By default all services are singleton unless explicitly set otherwise using ```{singleton: false}``` option :
 ```javascript
 class Redis {
 }
