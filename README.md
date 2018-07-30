@@ -54,7 +54,7 @@ let usersRepo = container.get('users'); //store sub-dependency will be injected 
   
   
   
-Also note that factory functions that are passed to 'registerFactory' method receive the container object as their first argument:
+Also note that factory functions that are passed to 'registerFactory' method receive the container object as their first argument along with other dependencies listed as parameters to the factory function after the first argument (i.e. container; the name doesn't matter for the first parameter):
 ```javascript
 class Time {}
 class Logger {}
