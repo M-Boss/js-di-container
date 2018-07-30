@@ -1,5 +1,5 @@
 # js-di-container
-This is a simple yet adequately powerful service container used for dependency injection.
+A simple yet adequately powerful dependency injection container to help implement IoC in Javascript
 It supports registering/binding:
 - classes
 - function constructors
