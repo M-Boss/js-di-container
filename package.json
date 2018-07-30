@@ -14,5 +14,21 @@
     "test": "mocha"
   },
   "author": "Mohammad Arbab <arbab.mohammad92@gmail.com> (mboss.org)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/M-Boss/js-di-container.git"
+  },
+  "keywords": [
+    "ioc",
+    "dependency-injection",
+    "injection",
+    "container",
+    "service",
+    "provider"
+  ],
+  "bugs": {
+    "url": "https://github.com/M-Boss/js-di-container/issues"
+  },
+  "homepage": "https://github.com/M-Boss/js-di-container#readme",
   "license": "ISC"
 }
