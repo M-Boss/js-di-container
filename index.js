@@ -2,6 +2,14 @@
  * Created by guy on 7/27/18.
  */
 
+let {
+    getFunctionParamNames,
+    getConstructorParamNames,
+    stripComments
+} = require('./utilities/helpers');
+
+
+
 /**
  * This is a simple yet adequately powerful service container used for
  * dependency injection.It supports registering/binding:
@@ -39,12 +47,13 @@
  * sample #3:
  * class Time {...}
  * class Logger {...}
- * let config = {key: 'secret}
+ * let config = {key: 'secret'}
  * function loggerFactory(container, time){
  *  return new Logger(time, config.key)
  * }
  * let container = new Container();
  * container.registerFactory('logger', loggerFactory, {singleton: false})
+ * container.registerClass('timer', Time)
  * let newLogger = container.get('logger')
  */
 class Container {
@@ -173,7 +182,7 @@ class Container {
 
         let dependenciesNames = [];
         if (provider.type === 'factory') {
-            dependenciesNames = this.constructor.getFunctionParamNames(provider.service);
+            dependenciesNames = getFunctionParamNames(provider.service);
             //first argument to factory functions is the container itself
             if (dependenciesNames.length > 0) dependenciesNames = dependenciesNames.slice(1)
         }
@@ -182,10 +191,10 @@ class Container {
             let classCode = provider.service.toString();
             //console.log("Code for provider: ", provider, classCode);
             if (classCode.startsWith("class")) {
-                dependenciesNames = this.constructor.getConstructorParamNames(provider.service)
+                dependenciesNames = getConstructorParamNames(provider.service)
             }
             else {
-                dependenciesNames = this.constructor.getFunctionParamNames(provider.service)
+                dependenciesNames = getFunctionParamNames(provider.service)
             }
         }
         return dependenciesNames;
@@ -228,45 +237,6 @@ class Container {
             instance = provider.service(this, ...subDependenciesArray)
         }
         return instance;
-    }
-
-
-    //////////////////////
-    /// Helper methods ///
-    //////////////////////
-    /**
-     * used to extract function parameter names
-     * @returns array of strings
-     */
-    static getFunctionParamNames(func) {
-        const ARGUMENT_NAMES = /([^\s,]+)/g;
-        let fnStr = this.stripComments(func.toString());
-        let result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
-        if (result === null)
-            result = [];
-        return result;
-    }
-
-
-    /**
-     * extract constructor parameter names (if one exists) from a class
-     * @returns array of strings
-     */
-    static getConstructorParamNames(cls){
-        const ARGUMENT_NAMES = /([^\s,]+)/g;
-        let fnStr =  this.stripComments(cls.toString());
-        let constructorIndex = fnStr.search(/constructor[\s]*\(/);
-        if(constructorIndex === -1) return [];
-        let result = fnStr.slice(fnStr.indexOf('(', constructorIndex) + 1, fnStr.indexOf(')', constructorIndex)).match(ARGUMENT_NAMES);
-        if (result === null)
-            result = [];
-        return result;
-    }
-
-
-    static stripComments(string){
-        const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
-        return string.replace(STRIP_COMMENTS, '');
     }
 }
 

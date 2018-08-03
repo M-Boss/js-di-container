@@ -133,4 +133,24 @@ describe('Container', function(){
             }, Container.CircularDependencyError);
         })
     });
+
+
+    describe('get()', function(){
+        it('should detect circular dependencies (in auto-injection cases) and throw', function(){
+            let container = new Container();
+            class Dep1{
+                constructor(dep2){}
+            }
+            class Dep2{
+                constructor(dep1){}
+            }
+
+            container.registerClass('dep1', Dep1);
+            container.registerClass('dep2', Dep2);
+
+            assert.throws(function(){
+                container.get('dep1');
+            }, Container.CircularDependencyError);
+        })
+    });
 });
