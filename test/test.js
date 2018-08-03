@@ -3,7 +3,8 @@
  */
 
 let assert = require('assert');
-let {Container} = require('../index')
+let should = require('chai').should();
+let {Container} = require('../index');
 
 
 describe('Container', function(){
@@ -27,7 +28,7 @@ describe('Container', function(){
         it('should return an instance of the registered service', function(){
             container.registerClass('test', Test);
             let service = container.get('test');
-            assert(service instanceof Test)
+            service.should.be.an.instanceOf(Test);
         })
     });
 
@@ -38,16 +39,18 @@ describe('Container', function(){
                 return new Test();
             });
             let service = container.get('test');
-            assert(service instanceof Test)
+            service.should.be.an.instanceOf(Test)
         })
     });
 
 
     describe('get()', function(){
         it('should throw for unregistered services', function(){
-            assert.throws(function(){
+
+            function gettingUnregisteredService(){
                 container.get('UnregisteredService')
-            })
+            }
+            gettingUnregisteredService.should.throw();
         })
     });
 
@@ -64,7 +67,12 @@ describe('Container', function(){
             container.registerClass('dep1', Dep1);
             container.registerClass('dep2', Dep2);
             container.registerFactory('service', fac);
-            let service = container.get('service');
+
+            function gettingService(){
+                container.get('service');
+            }
+
+            gettingService.should.not.throw();
         })
     });
 
@@ -76,7 +84,8 @@ describe('Container', function(){
 
             let dep1 = container.get('dep1');
             let dep2 = container.get('dep2');
-            assert(dep2.dep1 === dep1)
+
+            dep2.dep1.should.equal(dep1);
         })
     });
 
@@ -86,7 +95,8 @@ describe('Container', function(){
             container.registerClass('service', Dep1);
             let d1 = container.get('service');
             let d2 = container.get('service');
-            assert(d1 === d2)
+
+            d1.should.equal(d2);
         })
     });
 
@@ -96,7 +106,7 @@ describe('Container', function(){
             container.registerClass('service', Dep1, {singleton: false});
             let d1 = container.get('service');
             let d2 = container.get('service');
-            assert(d1 !== d2)
+            d1.should.not.equal(d2);
         })
     });
 
@@ -113,9 +123,10 @@ describe('Container', function(){
             container.registerClass('dep1', Dep1);
             container.registerClass('dep2', Dep2);
 
-            assert.throws(function(){
+            function gettingDep1(){
                 container.get('dep1');
-            }, Container.CircularDependencyError);
+            }
+            gettingDep1.should.throw(Container.CircularDependencyError);
         })
     });
 });
